@@ -1,0 +1,20 @@
+{
+    "name": "bristy/myplugin",
+    "description": "A basic plugin using oop",
+    "type": "wordpress-plugin",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "Bristy",
+            "email": "meharun022@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "MyPlugin\\" : "includes/"
+        },
+        "files": [ "includes/functions.php" ]
+    }
+}
