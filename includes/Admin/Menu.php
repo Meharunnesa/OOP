@@ -9,8 +9,11 @@ namespace MyPlugin\Admin;
  */
 class Menu{
 
+    public $addressbook;
 
-    function __construct() {
+    function __construct( $addressbook ) {
+        $this->addressbook = $addressbook;
+
         add_action( 'admin_menu' , [ $this , 'admin_menu' ] );
     }
 
@@ -23,7 +26,7 @@ class Menu{
             __( 'Test Menu' , 'my-plugin'),
             $capability,
             $parent_slug,
-            [ $this , 'address_book' ],
+            [ $this->addressbook , 'plugin_page' ],
             'dashicons-welcome-learn-more'
         );
 
@@ -33,7 +36,7 @@ class Menu{
             __( 'Address Book' , 'my-plugin'),
             $capability,
             $parent_slug,
-            [ $this , 'address_book' ]
+            [ $this->addressbook , 'plugin_page' ]
         );
 
         add_submenu_page(
@@ -46,12 +49,7 @@ class Menu{
         );
     }
 
-    public function address_book(){
-        $addressbook = new Addressbook(); // addressbook classs
-        $addressbook->plugin_page(); // call plugin_page function
-    }
-
-    public function settings(){
+    public function settings() {
         echo "this is the submenu of menu";
     }
 }

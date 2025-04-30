@@ -5,7 +5,9 @@ namespace MyPlugin\Admin;
 
 class Addressbook {
 
-    function plugin_page(){
+    public $errors = [];
+
+    function plugin_page() {
        $action = isset( $_GET['action'] ) ?  $_GET['action'] : 'list' ;
 
         
@@ -55,16 +57,32 @@ class Addressbook {
         $address = isset( $_POST['address'] ) ? sanitize_textarea_field( $_POST['address'] ) : '';
         $phone = isset( $_POST['phone'] ) ? sanitize_text_field( $_POST['phone'] ) : '';
 
+        if ( empty( $name ) ) {
+            $this->errors['name'] = __( 'Please provied a name' , 'my-plugin' );
+        }
 
-       $insert_id = wpd_insert_addrress([
+        if ( empty( $phone ) ) {
+            $this->errors['phone'] = __( 'Please provied a phone number' , 'my-plugin' );
+        }
+
+        if ( ! empty( $this->errors ) ) {
+            return;
+        }
+
+       $insert_id = wpd_insert_address( [
             'name'      => $name,
             'address'   => $address,
             'phone'     => $phone
-       ]);
+       ] );
 
-       
+       if (  is_wp_error( $insert_id ) ) {
+            wp_die( $insert_id->get_error_message() );
+       }
 
-        var_dump( $_POST );
+       $redirected_to = admin_url( 'admin.php?page=my-plugin&inserted=true' , 'admin' );
+       wp_redirect( $redirected_to );
+
+        // var_dump( $_POST );
         exit;
     }
 }
